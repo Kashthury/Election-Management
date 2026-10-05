@@ -15,22 +15,22 @@ export const initialDistricts = [
 
 export const initialCandidates = {
   1: [
-    { id: 101, name: "Candidate A" },
-    { id: 102, name: "Candidate B" },
-    { id: 103, name: "Candidate C" },
-    { id: 104, name: "Candidate D" },
-    { id: 105, name: "Candidate E" },
+    { id: 101, name: "Party A" },
+    { id: 102, name: "Party B" },
+    { id: 103, name: "Party C" },
+    { id: 104, name: "Party D" },
+    { id: 105, name: "Party E" },
   ],
   2: [
-    { id: 201, name: "Candidate F" },
-    { id: 202, name: "Candidate G" },
-    { id: 203, name: "Candidate H" },
+    { id: 201, name: "Party F" },
+    { id: 202, name: "Party G" },
+    { id: 203, name: "Party H" },
   ],
   4: [
-    { id: 401, name: "Candidate I" },
-    { id: 402, name: "Candidate J" },
-    { id: 403, name: "Candidate K" },
-    { id: 404, name: "Candidate L" },
+    { id: 401, name: "Party I" },
+    { id: 402, name: "Party J" },
+    { id: 403, name: "Party K" },
+    { id: 404, name: "Party L" },
   ],
 };
 

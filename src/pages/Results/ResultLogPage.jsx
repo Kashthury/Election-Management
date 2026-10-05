@@ -32,7 +32,7 @@ export default function ResultLogPage() {
     <Card>
       <div className="card-title"><h3>Calculation history</h3><p>Each successful calculation is saved in this browser for later review.</p></div>
       {resultsLog.length ? <>
-        <DataTable columns={["Calculated","District","Valid votes","Candidates","Seats","Action"]}>
+        <DataTable columns={["Calculated","District","Valid votes","Parties","Seats","Action"]}>
           {pageItems.map(result=><tr key={result.logId || `${result.district}-${result.calculatedAt}`}>
             <td><span className="result-log-time">{new Date(result.calculatedAt).toLocaleString()}</span></td>
             <td><strong>{result.district}</strong></td>

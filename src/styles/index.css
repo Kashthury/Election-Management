@@ -52,3 +52,12 @@
 @media(max-width:700px){.election-header-filters .election-valid-filter{width:100%;flex:1}.election-header-filters .election-valid-filter .input{height:39px}}
 .result-log-stats .stat-card{min-width:0}.result-log-latest{font-size:14px!important}.result-log-time{white-space:nowrap;color:#62718a;font-size:10px}.result-log-open{padding:7px 10px;font-size:10px}.result-log-empty{padding:50px 20px}.result-log-empty .button{margin-top:12px}
 @media(max-width:700px){.result-log-time{white-space:normal}.result-log-open{white-space:nowrap}}
+.seat-allocation-error{margin:0 0 12px;padding:10px 12px}.crud-modal select.input{appearance:auto}.crud-modal .modal-actions .button:disabled{opacity:.65;cursor:wait}
+.seat-allocation-empty-hint{margin:-4px 0 16px;padding:10px 12px;border-radius:7px;background:#fff7e8;color:#8b641b;font-size:10px;line-height:1.5}
+.nomination-filters{grid-template-columns:repeat(2,minmax(0,1fr));align-items:end}.nomination-filters>label{min-width:0}.nomination-filters .input{width:100%}
+@media(max-width:520px){.nomination-filters{grid-template-columns:1fr}}
+.nomination-filters{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.nomination-filters .input{height:40px}.nomination-filters input[type=search]{padding-right:12px}
+@media(max-width:700px){.nomination-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.nomination-filters{grid-template-columns:1fr}}
+.vote-entry-table .vote-count-readonly{display:inline-flex;min-width:76px;justify-content:flex-end;padding:7px 10px;background:#f5f8fc;border:1px solid #e8edf4;border-radius:7px;color:#34445a;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}.vote-entry-table td:last-child{width:95px}.vote-entry-table .row-actions{justify-content:flex-start}
+.vote-entry-table th:nth-last-child(2),.vote-entry-table td:nth-last-child(2){text-align:center}.vote-entry-table .vote-count-readonly{justify-content:center}

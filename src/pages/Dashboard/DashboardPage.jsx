@@ -15,8 +15,8 @@ export default function DashboardPage() {
 
   const workflow = [
     ["01", "Configuration", "Set provinces, districts, seats and vote settings.", ROUTES.CONFIGURATION],
-    ["02", "Nominations", "Register and manage candidates by district.", ROUTES.NOMINATION],
-    ["03", "Vote entry", "Record valid votes and candidate votes.", ROUTES.ELECTION],
+    ["02", "Party nominations", "Register and manage parties by district.", ROUTES.NOMINATION],
+    ["03", "Vote entry", "Record valid votes and party votes.", ROUTES.ELECTION],
     ["04", "Results", "Review the calculated election results.", ROUTES.RESULTS],
   ];
 
@@ -25,7 +25,7 @@ export default function DashboardPage() {
     <div className="stats-grid">
       <StatCard title="Provinces" value={provinces.length} icon={Map}/>
       <StatCard title="Districts" value={districts.length} icon={Building2}/>
-      <StatCard title="Candidates" value={candidateCount} icon={Users}/>
+      <StatCard title="Parties" value={candidateCount} icon={Users}/>
       <StatCard title="Districts with seats" value={`${allocatedCount}/${districts.length}`} icon={BarChart3}/>
     </div>
     <div className="dashboard-grid">
@@ -36,7 +36,7 @@ export default function DashboardPage() {
       </Card>
       <Card><div className="card-title"><h3>Election at a glance</h3><p>Current setup and registration status.</p></div>
         <Readiness icon={Settings} title="Configuration" detail={`${provinces.length} provinces · ${districts.length} districts`} onClick={() => navigate(ROUTES.CONFIGURATION)}/>
-        <Readiness icon={Users} tone="violet" title="Candidate nominations" detail={`${candidateCount} candidates registered`} onClick={() => navigate(ROUTES.NOMINATION)}/>
+        <Readiness icon={Users} tone="violet" title="Party nominations" detail={`${candidateCount} parties registered`} onClick={() => navigate(ROUTES.NOMINATION)}/>
         <Readiness icon={BarChart3} tone="green" title="Seat allocation" detail={`${allocatedCount} of ${districts.length} districts configured`} onClick={() => navigate(ROUTES.SEATS)}/>
       </Card>
     </div>
