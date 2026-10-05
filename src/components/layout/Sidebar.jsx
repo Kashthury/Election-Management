@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, Settings, Users, Vote, BarChart3, FileText, X } from "lucide-react";
+import { LayoutDashboard, Settings, Users, Vote, BarChart3, FileText, History, X } from "lucide-react";
 import { ROUTES } from "../../constants/routes";
 
 const groups = [
   { label: "Workspace", items: [{ label: "Dashboard", icon: LayoutDashboard, to: ROUTES.DASHBOARD }] },
   { label: "Election Setup", items: [{ label: "Configuration", icon: Settings, to: ROUTES.CONFIGURATION }, { label: "Nominations", icon: Users, to: ROUTES.NOMINATION }] },
-  { label: "Election Operations", items: [{ label: "Vote Entry", icon: Vote, to: ROUTES.ELECTION }, { label: "Results", icon: BarChart3, to: ROUTES.RESULTS }, { label: "Reports", icon: FileText, to: ROUTES.REPORTS }] },
+  { label: "Election Operations", items: [{ label: "Vote Entry", icon: Vote, to: ROUTES.ELECTION }, { label: "Latest Results", icon: BarChart3, to: ROUTES.RESULTS }, { label: "Result Log", icon: History, to: ROUTES.RESULT_LOG }] },
 ];
 
 export default function Sidebar({ open, onClose }) {
@@ -19,7 +19,7 @@ export default function Sidebar({ open, onClose }) {
       <nav className="side-nav">
         {groups.map(group => <section className="nav-group" key={group.label} aria-label={group.label}>
           <div className="nav-label group-label">{group.label}</div>
-          {group.items.map(item => <NavLink end={item.to === ROUTES.DASHBOARD} key={item.to} to={item.to} onClick={onClose} className={({isActive}) => `nav-link ${isActive ? "active":""}`}>
+          {group.items.map(item => <NavLink end={item.to === ROUTES.DASHBOARD || item.to === ROUTES.RESULTS} key={item.to} to={item.to} onClick={onClose} className={({isActive}) => `nav-link ${isActive ? "active":""}`}>
             <item.icon size={18}/><span>{item.label}</span><span className="nav-link-indicator"/>
           </NavLink>)}
         </section>)}

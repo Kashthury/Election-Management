@@ -10,6 +10,7 @@ import ConfigurationPage from "../pages/Configuration/ConfigurationPage";
 import NominationPage from "../pages/Nomination/NominationPage";
 import ElectionPage from "../pages/Election/ElectionPage";
 import ResultsPage from "../pages/Results/ResultsPage";
+import ResultLogPage from "../pages/Results/ResultLogPage";
 import ReportsPage from "../pages/Reports/ReportsPage";
 
 export default function AppRoutes() {
@@ -24,6 +25,7 @@ export default function AppRoutes() {
         <Route path={ROUTES.SETTINGS} element={<VoteSettingsPage />} />
         <Route path={ROUTES.NOMINATION} element={<NominationPage />} />
         <Route path={ROUTES.ELECTION} element={<ElectionPage />} />
+        <Route path={ROUTES.RESULT_LOG} element={<ResultLogPage />} />
         <Route path={ROUTES.RESULTS} element={<ResultsPage />} />
         <Route path={ROUTES.REPORTS} element={<ReportsPage />} />
       </Route>

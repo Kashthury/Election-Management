@@ -50,3 +50,5 @@
 .election-header-filters .election-valid-filter{height:auto;width:150px;display:grid;gap:4px;color:#40516a;font-size:9px;font-weight:750;letter-spacing:.025em}.election-valid-filter .input{width:100%;height:37px;padding:7px 9px;font-size:12px;font-weight:600}.election-header-filters{align-items:end}
 @media(max-width:900px){.election-header-filters .election-valid-filter{flex:0 0 135px;width:135px}}
 @media(max-width:700px){.election-header-filters .election-valid-filter{width:100%;flex:1}.election-header-filters .election-valid-filter .input{height:39px}}
+.result-log-stats .stat-card{min-width:0}.result-log-latest{font-size:14px!important}.result-log-time{white-space:nowrap;color:#62718a;font-size:10px}.result-log-open{padding:7px 10px;font-size:10px}.result-log-empty{padding:50px 20px}.result-log-empty .button{margin-top:12px}
+@media(max-width:700px){.result-log-time{white-space:normal}.result-log-open{white-space:nowrap}}

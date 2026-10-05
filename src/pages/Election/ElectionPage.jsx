@@ -9,7 +9,7 @@ import Button from "../../components/common/Button";
 import VoteEntryTable from "../../components/election/VoteEntryTable";
 
 export default function ElectionPage() {
-  const { provinces, districts, candidates, settings, setLastResult } = useAppContext();
+  const { provinces, districts, candidates, settings, appendResult } = useAppContext();
   const initialProvinceId=districts[0]?.provinceId ?? provinces[0]?.id ?? "";
   const [provinceId,setProvinceId]=useState(String(initialProvinceId));
   const initialDistrict=districts.find(d=>String(d.provinceId)===String(initialProvinceId))||districts[0];
@@ -56,7 +56,7 @@ export default function ElectionPage() {
         disqualifiedPercentage:settings.disqualifiedPercentage,
         candidates:list.map((c,i)=>({...c,votes:Number(votes[i]||0)})),
       });
-      setLastResult(result);
+      appendResult(result);
       setError("");
       navigate(ROUTES.RESULTS);
     }catch(e){setError(e.message)}

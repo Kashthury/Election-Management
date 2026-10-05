@@ -8,5 +8,6 @@ export const ROUTES = {
   NOMINATION: "/nomination",
   ELECTION: "/election",
   RESULTS: "/results",
+  RESULT_LOG: "/results/log",
   REPORTS: "/reports",
 };
