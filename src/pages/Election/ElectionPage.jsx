@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Calculator, AlertCircle, Building2, Users, Armchair, Search } from "lucide-react";
+import { Calculator, AlertCircle, Building2, Users, Armchair, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
 import { electionService } from "../../services/electionService";
@@ -9,18 +9,33 @@ import Button from "../../components/common/Button";
 import VoteEntryTable from "../../components/election/VoteEntryTable";
 
 export default function ElectionPage() {
-  const { districts, candidates, settings, setLastResult } = useAppContext();
-  const [districtId,setDistrictId]=useState(districts[0]?.id || "");
+  const { provinces, districts, candidates, settings, setLastResult } = useAppContext();
+  const initialProvinceId=districts[0]?.provinceId ?? provinces[0]?.id ?? "";
+  const [provinceId,setProvinceId]=useState(String(initialProvinceId));
+  const initialDistrict=districts.find(d=>String(d.provinceId)===String(initialProvinceId))||districts[0];
+  const [districtId,setDistrictId]=useState(String(initialDistrict?.id ?? ""));
   const district=useMemo(()=>districts.find(d=>d.id===Number(districtId)),[districts,districtId]);
   const list=candidates[districtId] || [];
   const [validVotes,setValidVotes]=useState(0);
   const [votes,setVotes]=useState([]);
   const [error,setError]=useState("");
   const navigate=useNavigate();
+  const provinceDistricts=useMemo(()=>districts.filter(d=>String(d.provinceId)===provinceId),[districts,provinceId]);
+
+  const changeProvince=e=>{
+    const nextProvinceId=e.target.value;
+    const nextDistrict=districts.find(d=>String(d.provinceId)===nextProvinceId);
+    setProvinceId(nextProvinceId);
+    setDistrictId(String(nextDistrict?.id ?? ""));
+    setVotes((candidates[nextDistrict?.id]||[]).map(()=>0));
+    setValidVotes(0);
+    setError("");
+  };
 
   const changeDistrict=e=>{
     const id=e.target.value;
     setDistrictId(id);
+    if(id){const selected=districts.find(d=>String(d.id)===id);if(selected)setProvinceId(String(selected.provinceId));}
     setVotes((candidates[id]||[]).map(()=>0));
     setValidVotes(0);
     setError("");
@@ -55,8 +70,7 @@ export default function ElectionPage() {
       <div className="module-summary-card"><span className="module-summary-icon green"><Users size={19}/></span><div><small>Registered candidates</small><strong>{list.length}</strong></div></div>
     </div>
     <section className="module-panel election-entry-panel">
-      <div className="module-panel-heading election-panel-heading"><div><h3>Vote entry</h3><p>Enter valid votes and candidate totals for the selected district.</p></div><label className="election-district-filter"><Search size={16}/><span className="sr-only">Filter by district</span><select value={districtId} onChange={changeDistrict} aria-label="Select district">{districts.map(d=><option key={d.id} value={d.id}>{d.name}</option>)}</select></label></div>
-      <div className="election-valid-votes"><label htmlFor="valid-votes">Valid votes</label><input id="valid-votes" className="input" type="number" min="0" value={validVotes} onChange={e=>setValidVotes(e.target.value)}/><span>Enter the total count of valid ballots.</span></div>
+      <div className="module-panel-heading election-panel-heading"><div><h3>Vote entry</h3><p>Enter valid votes and candidate totals for the selected district.</p></div><div className="election-header-filters"><label className="election-district-filter"><MapPin size={16}/><span className="sr-only">Select province</span><select value={provinceId} onChange={changeProvince} aria-label="Select province"><option value="">Select province</option>{provinces.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label><label className="election-district-filter"><Building2 size={16}/><span className="sr-only">Select district</span><select value={districtId} onChange={changeDistrict} aria-label="Select district" disabled={!provinceDistricts.length}><option value="">{provinceDistricts.length?"Select district":"No districts in this province"}</option>{provinceDistricts.map(d=><option key={d.id} value={d.id}>{d.name}</option>)}</select></label><label className="election-valid-filter"><span>Valid votes</span><input id="valid-votes" className="input" type="number" min="0" value={validVotes} onChange={e=>setValidVotes(e.target.value)}/></label></div></div>
       <VoteEntryTable candidates={list} votes={votes} onChange={updateVote}/>
       <div className={`vote-summary ${total===Number(validVotes)&&Number(validVotes)>0?"matched":""}`}><span>Candidate Total <b>{total.toLocaleString()}</b></span><span>Valid Votes <b>{Number(validVotes||0).toLocaleString()}</b></span></div>
       {error && <div className="error-box"><AlertCircle size={18}/>{error}</div>}

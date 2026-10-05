@@ -39,6 +39,10 @@ export default function ProvincesPage() {
     await provinceService.delete(id);
     setProvinces(prev => prev.filter(x=>x.id!==id));
   };
+  const changeStatus = async (province, status) => {
+    const updated = await provinceService.updateStatus(province.id, status);
+    setProvinces(prev => prev.map(item => item.id === province.id ? { ...item, ...updated, status } : item));
+  };
 
   return <div>
     <PageHeader title="Province Management" description="Manage the provinces used by the election system." action={<div className="configuration-page-actions"><button className="button secondary configuration-back" onClick={() => navigate(ROUTES.CONFIGURATION)}><ArrowLeft size={16}/> Back to Configuration</button><Button icon={Plus} onClick={openCreate}>Add Province</Button></div>}/>
@@ -50,7 +54,7 @@ export default function ProvincesPage() {
     <section className="module-panel">
       <div className="module-panel-heading"><div><h3>All provinces</h3><p>Search and manage the regions in your election setup.</p></div><label className="module-search"><Search size={16}/><input aria-label="Search provinces" placeholder="Search provinces" value={query} onChange={e=>{setQuery(e.target.value);resetPage();}}/></label></div>
       <div className="table-scroll"><table className="data-table module-table"><thead><tr><th>Province</th><th>Districts</th><th>Status</th><th className="actions-column">Actions</th></tr></thead><tbody>
-        {visibleProvinces.map(p=><tr key={p.id}><td><div className="entity-cell"><span className="entity-avatar">{p.name.slice(0,1).toUpperCase()}</span><strong>{p.name}</strong></div></td><td>{p.districtCount || 0}</td><td><span className="module-status"><i/>Active</span></td><td><div className="row-actions"><button className="row-action" aria-label={`Edit ${p.name}`} title="Edit" onClick={()=>openEdit(p)}><SquarePen size={16}/></button><button className="row-action delete" aria-label={`Delete ${p.name}`} title="Delete" onClick={()=>remove(p.id)}><Trash2 size={16}/></button></div></td></tr>)}
+        {visibleProvinces.map(p=>{const status=(p.status||"active").toLowerCase();return <tr key={p.id}><td><div className="entity-cell"><span className="entity-avatar">{p.name.slice(0,1).toUpperCase()}</span><strong>{p.name}</strong></div></td><td>{p.districtCount || 0}</td><td><label className={`province-status-select ${status}`}><span className="module-status"><i/>{status === "active" ? "Active" : "Inactive"}</span><select aria-label={`${p.name} status`} value={status} onChange={e=>changeStatus(p,e.target.value)}><option value="active">Active</option><option value="inactive">Inactive</option></select></label></td><td><div className="row-actions"><button className="row-action" aria-label={`Edit ${p.name}`} title="Edit" onClick={()=>openEdit(p)}><SquarePen size={16}/></button><button className="row-action delete" aria-label={`Delete ${p.name}`} title="Delete" onClick={()=>remove(p.id)}><Trash2 size={16}/></button></div></td></tr>;})}
         {!visibleProvinces.length && <tr><td colSpan="4" className="module-empty">{query ? "No provinces match your search." : "No provinces yet. Add a province to get started."}</td></tr>}
       </tbody></table></div>
       <Pagination {...(pagination || {page:1,pageCount:1,total:filteredProvinces.length,pageSize:10,setPage:()=>{}})} />

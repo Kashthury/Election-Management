@@ -20,6 +20,14 @@ export const provinceService = {
     }
     return adapter.put(`/provinces/${id}`, payload);
   },
+  updateStatus: async (id, status) => {
+    const payload = { status };
+    if (useMock) {
+      mockData = mockData.map(item => item.id === id ? { ...item, ...payload } : item);
+      return adapter.save(mockData.find(item => item.id === id));
+    }
+    return adapter.patch(`/provinces/${id}`, payload);
+  },
   delete: async (id) => {
     if (useMock) {
       mockData = mockData.filter(item => item.id !== id);

@@ -20,6 +20,14 @@ export const districtService = {
     }
     return adapter.put(`/districts/${id}`, payload);
   },
+  updateStatus: async (id, status) => {
+    const payload = { status };
+    if (useMock) {
+      mockData = mockData.map(item => item.id === id ? { ...item, ...payload } : item);
+      return adapter.save(mockData.find(item => item.id === id));
+    }
+    return adapter.patch(`/districts/${id}`, payload);
+  },
   delete: async (id) => {
     if (useMock) {
       mockData = mockData.filter(item => item.id !== id);
