@@ -1,0 +1,9 @@
+export const ELECTION_STATUS = {
+  DRAFT: "DRAFT",
+  READY: "READY",
+  IN_PROGRESS: "IN_PROGRESS",
+  COMPLETED: "COMPLETED",
+} as const;
+
+export const MAX_PROVINCES = 15;
+export const MAX_CANDIDATES = 15;
