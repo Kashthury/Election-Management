@@ -20,8 +20,14 @@ export default function NominationPage() {
   const [saving,setSaving]=useState(false);
   const [saveError,setSaveError]=useState("");
   const [partyQuery,setPartyQuery]=useState("");
-  const list=candidates[districtId] || [];
-  const filteredParties=useMemo(()=>list.filter(p=>p.name.toLowerCase().includes(partyQuery.trim().toLowerCase())),[list,partyQuery]);
+  const list=useMemo(()=>districtId ? candidates[districtId] || [] : Object.entries(candidates).flatMap(([id,parties])=>parties.map(party=>({ ...party, districtId: party.districtId ?? Number(id) }))),[candidates,districtId]);
+  const filteredParties=useMemo(()=>list.filter(p=>{
+    const partyDistrict=districts.find(d=>d.id===Number(p.districtId));
+    const matchesProvince=!provinceId||String(partyDistrict?.provinceId)===provinceId;
+    const matchesDistrict=!districtId||String(partyDistrict?.id)===districtId;
+    const matchesQuery=p.name.toLowerCase().includes(partyQuery.trim().toLowerCase());
+    return matchesProvince&&matchesDistrict&&matchesQuery;
+  }),[list,districts,provinceId,districtId,partyQuery]);
   const { pageItems, pagination, resetPage } = usePagination(filteredParties);
   const provinceDistricts=useMemo(()=>districts.filter(d=>String(d.provinceId)===provinceId),[districts,provinceId]);
 
@@ -88,7 +94,7 @@ export default function NominationPage() {
       <label><span className="nomination-filter-label"><Search size={14}/> Search party</span><input className="input" type="search" placeholder="Enter party name" value={partyQuery} onChange={e=>{setPartyQuery(e.target.value);resetPage();}}/></label>
     </div></Card>
     <Card><div className="card-title"><h3>Registered parties</h3><p>{districts.find(d=>d.id===Number(districtId))?.name} · {filteredParties.length} shown / {list.length} registered</p></div>
-      <DataTable columns={["#","Party","Actions"]}>{pageItems.map((c,i)=><tr key={c.id}><td>{(pagination?.page-1||0)*(pagination?.pageSize||10)+i+1}</td><td><strong>{c.name}</strong></td><td><div className="row-actions"><button className="row-action" onClick={()=>openEdit(c)} aria-label={`Edit ${c.name}`} title="Edit"><SquarePen size={16}/></button><button className="row-action delete" onClick={()=>remove(c.id)} aria-label={`Remove ${c.name}`} title="Remove"><Trash2 size={16}/></button></div></td></tr>)}</DataTable>
+      <div className="table-scroll"><table className="data-table registered-parties-table"><thead><tr><th>#</th><th>Party</th><th>Province</th><th>District</th><th className="registered-parties-actions">Actions</th></tr></thead><tbody>{pageItems.map((c,i)=>{const partyDistrict=districts.find(d=>d.id===Number(c.districtId));const partyProvince=provinces.find(p=>p.id===partyDistrict?.provinceId);return <tr key={`${c.districtId}-${c.id}`}><td>{(pagination?.page-1||0)*(pagination?.pageSize||10)+i+1}</td><td><strong>{c.name}</strong></td><td>{partyProvince?.name||partyDistrict?.provinceName||"—"}</td><td>{partyDistrict?.name||"—"}</td><td className="registered-parties-actions"><div className="row-actions"><button className="row-action" onClick={()=>openEdit(c)} aria-label={`Edit ${c.name}`} title="Edit"><SquarePen size={16}/></button><button className="row-action delete" onClick={()=>remove(c.id)} aria-label={`Remove ${c.name}`} title="Remove"><Trash2 size={16}/></button></div></td></tr>;})}</tbody></table></div>
       {!filteredParties.length&&<div className="module-empty">{partyQuery?"No parties match your search.":"No parties registered for this district yet."}</div>}
       <Pagination {...(pagination || {page:1,pageCount:1,total:filteredParties.length,pageSize:10,setPage:()=>{}})} />
     </Card>

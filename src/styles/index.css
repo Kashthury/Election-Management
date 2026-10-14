@@ -56,6 +56,7 @@
 .seat-allocation-empty-hint{margin:-4px 0 16px;padding:10px 12px;border-radius:7px;background:#fff7e8;color:#8b641b;font-size:10px;line-height:1.5}
 .nomination-filters{grid-template-columns:repeat(2,minmax(0,1fr));align-items:end}.nomination-filters>label{min-width:0}.nomination-filters .input{width:100%}
 @media(max-width:520px){.nomination-filters{grid-template-columns:1fr}}
+.registered-parties-table{min-width:760px;table-layout:fixed}.registered-parties-table th:first-child,.registered-parties-table td:first-child{width:64px}.registered-parties-table .registered-parties-actions{width:132px;text-align:center!important}.registered-parties-table .row-actions{justify-content:center}
 .nomination-filters{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.nomination-filters .input{height:40px}.nomination-filters input[type=search]{padding-right:12px}
 @media(max-width:700px){.nomination-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.nomination-filters{grid-template-columns:1fr}}
