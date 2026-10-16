@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
-import { electionService } from "../../services/electionService";
+import { electionService } from "../../api/management/election";
 import { ROUTES } from "../../constants/routes";
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/common/Button";
@@ -23,7 +23,7 @@ import { usePagination } from "../../hooks/usePagination";
 import type { Party } from "../../types";
 
 export default function ElectionPage() {
-  const { provinces, districts, candidates, settings, appendResult } =
+  const { provinces, districts, parties, settings, appendResult } =
     useAppContext();
   const [provinceId, setProvinceId] = useState("");
   const [districtId, setDistrictId] = useState("");
@@ -31,7 +31,7 @@ export default function ElectionPage() {
     () => districts.find((d) => d.id === Number(districtId)),
     [districts, districtId],
   );
-  const list = candidates[districtId] || [];
+  const list = parties[districtId] || [];
   const [validVotes, setValidVotes] = useState(0);
   const [votes, setVotes] = useState([]);
   const [error, setError] = useState("");
@@ -69,17 +69,17 @@ export default function ElectionPage() {
   const visibleParties = useMemo(
     () =>
       visibleVoteDistricts.flatMap((item) =>
-        (candidates[item.id] || []).map((party) => ({
+        (parties[item.id] || []).map((party) => ({
           ...party,
           districtId: String(item.id),
           provinceId: String(item.provinceId),
           districtName: item.name,
         })),
       ),
-    [visibleVoteDistricts, candidates],
+    [visibleVoteDistricts, parties],
   );
   const visiblePartyVotes = visibleParties.map((party) => {
-    const partyIndex = (candidates[party.districtId] || []).findIndex(
+    const partyIndex = (parties[party.districtId] || []).findIndex(
       (item) => item.id === party.id,
     );
     return party.districtId === districtId ? Number(votes[partyIndex] ?? 0) : 0;
@@ -102,7 +102,7 @@ export default function ElectionPage() {
     const targetDistrict = districts.find(
       (item) => String(item.id) === targetDistrictId,
     );
-    const targetParties = candidates[targetDistrictId] || [];
+    const targetParties = parties[targetDistrictId] || [];
     setDraftProvinceId(String(targetDistrict?.provinceId ?? provinceId));
     setDraftDistrictId(targetDistrictId);
     const currentParty = selectedParty;
@@ -119,7 +119,7 @@ export default function ElectionPage() {
   };
   const applyPartyVote = (e) => {
     e.preventDefault();
-    const targetParties = candidates[draftDistrictId] || [];
+    const targetParties = parties[draftDistrictId] || [];
     const partyIndex = targetParties.findIndex(
       (p) => String(p.id) === draftPartyId,
     );
@@ -151,7 +151,7 @@ export default function ElectionPage() {
   const applyVoteDetails = (e) => {
     e.preventDefault();
     if (draftDistrictId !== districtId) {
-      setVotes((candidates[draftDistrictId] || []).map(() => 0));
+      setVotes((parties[draftDistrictId] || []).map(() => 0));
       setError("");
     }
     setProvinceId(draftProvinceId);
@@ -176,7 +176,7 @@ export default function ElectionPage() {
       const selected = districts.find((d) => String(d.id) === id);
       if (selected) setProvinceId(String(selected.provinceId));
     }
-    setVotes((candidates[id] || []).map(() => 0));
+    setVotes((parties[id] || []).map(() => 0));
     setValidVotes(0);
     setError("");
   };
@@ -195,7 +195,7 @@ export default function ElectionPage() {
         seats: district.seats,
         validVotes: Number(validVotes),
         disqualifiedPercentage: settings.disqualifiedPercentage,
-        candidates: list.map((c, i) => ({
+        parties: list.map((c, i) => ({
           ...c,
           votes: Number(votes[i] || 0),
         })),
@@ -576,7 +576,7 @@ export default function ElectionPage() {
                   onChange={(e) => {
                     const id = e.target.value;
                     setDraftPartyId(id);
-                    const index = (candidates[draftDistrictId] || []).findIndex(
+                    const index = (parties[draftDistrictId] || []).findIndex(
                       (p) => String(p.id) === id,
                     );
                     setDraftPartyVotes(
@@ -587,18 +587,18 @@ export default function ElectionPage() {
                   }}
                   disabled={
                     !draftDistrictId ||
-                    !(candidates[draftDistrictId] || []).length
+                    !(parties[draftDistrictId] || []).length
                   }
                   required
                 >
                   <option value="">
                     {!draftDistrictId
                       ? "Select a district first"
-                      : (candidates[draftDistrictId] || []).length
+                      : (parties[draftDistrictId] || []).length
                         ? "Select a party"
                         : "No parties registered in this district"}
                   </option>
-                  {(candidates[draftDistrictId] || []).map((p) => (
+                  {(parties[draftDistrictId] || []).map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.name}
                     </option>

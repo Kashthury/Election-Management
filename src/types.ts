@@ -26,7 +26,7 @@ export interface Party {
   bonus?: boolean;
 }
 
-export type CandidatesByDistrict = Record<string, Party[]>;
+export type PartiesByDistrict = Record<string, Party[]>;
 
 export interface ElectionSettings {
   disqualifiedPercentage: number;
@@ -40,7 +40,7 @@ export interface ElectionResult {
   disqualifiedVotes: number;
   qualifyingVotes: number;
   allocation: number;
-  candidates: Party[];
+  parties: Party[];
   logId?: string;
   calculatedAt?: string;
 }

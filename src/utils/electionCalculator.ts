@@ -8,7 +8,7 @@ interface ElectionCalculationInput {
   district: District["name"];
   seats: number;
   validVotes: number;
-  candidates: Party[];
+  parties: Party[];
   disqualifiedPercentage: number;
 }
 
@@ -16,14 +16,14 @@ export function calculateElectionResult({
   district,
   seats,
   validVotes,
-  candidates,
+  parties,
   disqualifiedPercentage,
 }: ElectionCalculationInput): ElectionResult {
-  const votes = candidates.map(c => Number(c.votes || 0));
-  const totalCandidateVotes = votes.reduce((sum, value) => sum + value, 0);
+  const votes = parties.map(c => Number(c.votes || 0));
+  const totalPartyVotes = votes.reduce((sum, value) => sum + value, 0);
 
-  if (totalCandidateVotes !== Number(validVotes)) {
-    throw new Error("Candidate vote total must equal valid votes.");
+  if (totalPartyVotes !== Number(validVotes)) {
+    throw new Error("Party vote total must equal valid votes.");
   }
   if (Number(seats) <= 1) {
     throw new Error("Number of seats must be greater than 1.");
@@ -58,7 +58,7 @@ export function calculateElectionResult({
     let index = -1;
     let maxBalance = -1;
 
-    for (let i = 0; i < candidates.length; i++) {
+    for (let i = 0; i < parties.length; i++) {
       if (qualified[i] && !found.has(i) && balances[i] > maxBalance) {
         index = i;
         maxBalance = balances[i];
@@ -71,7 +71,7 @@ export function calculateElectionResult({
     balanceSeats--;
   }
 
-  const totalSeats = candidates.map((_, i) =>
+  const totalSeats = parties.map((_, i) =>
     round1[i] + round2[i] + (i === bonusIndex ? 1 : 0)
   );
 
@@ -83,7 +83,7 @@ export function calculateElectionResult({
     disqualifiedVotes,
     qualifyingVotes,
     allocation,
-    candidates: candidates.map((c, i) => ({
+    parties: parties.map((c, i) => ({
       ...c,
       votes: votes[i],
       qualified: qualified[i],

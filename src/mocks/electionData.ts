@@ -1,4 +1,4 @@
-import type { CandidatesByDistrict, District, ElectionSettings, Party, Province } from "../types";
+import type { PartiesByDistrict, District, ElectionSettings, Party, Province } from "../types";
 
 export const initialProvinces: Province[] = [
   { id: 1, name: "Western Province", districtCount: 3 },
@@ -15,7 +15,7 @@ export const initialDistricts: District[] = [
   { id: 6, provinceId: 2, provinceName: "Central Province", name: "Nuwara Eliya", seats: 8 },
 ];
 
-export const initialCandidates: CandidatesByDistrict = {
+export const initialParties: PartiesByDistrict = {
   1: [
     { id: 101, name: "Party A" },
     { id: 102, name: "Party B" },

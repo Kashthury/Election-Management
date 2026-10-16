@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Building2, MapPin, Plus, Search, SquarePen, Trash2, Users, X } from "lucide-react";
 import { useAppContext } from "../../context/AppContext";
-import { candidateService } from "../../services/candidateService";
+import { partyService } from "../../api/management/parties";
 import PageHeader from "../../components/common/PageHeader";
 import Card from "../../components/common/Card";
 import Button from "../../components/common/Button";
@@ -12,7 +12,7 @@ import ClearFiltersButton from "../../components/common/ClearFiltersButton";
 import type { Party } from "../../types";
 
 export default function NominationPage() {
-  const { provinces, districts, candidates, setCandidates } = useAppContext();
+  const { provinces, districts, parties, setParties } = useAppContext();
   const [provinceId,setProvinceId]=useState("");
   const [districtId,setDistrictId]=useState("");
   const [name,setName]=useState("");
@@ -21,7 +21,7 @@ export default function NominationPage() {
   const [saving,setSaving]=useState(false);
   const [saveError,setSaveError]=useState("");
   const [partyQuery,setPartyQuery]=useState("");
-  const list=useMemo(()=>districtId ? candidates[districtId] || [] : Object.entries(candidates).flatMap(([id,parties])=>parties.map(party=>({ ...party, districtId: party.districtId ?? Number(id) }))),[candidates,districtId]);
+  const list=useMemo(()=>districtId ? parties[districtId] || [] : Object.entries(parties).flatMap(([id,parties])=>parties.map(party=>({ ...party, districtId: party.districtId ?? Number(id) }))),[parties,districtId]);
   const filteredParties=useMemo(()=>list.filter(p=>{
     const partyDistrict=districts.find(d=>d.id===Number(p.districtId));
     const matchesProvince=!provinceId||String(partyDistrict?.provinceId)===provinceId;
@@ -44,8 +44,8 @@ export default function NominationPage() {
     if(!name.trim())return;
     setSaving(true);setSaveError("");
     try{
-      const item=await candidateService.create(Number(districtId),{name:name.trim()});
-      setCandidates(prev=>({...prev,[districtId]:[...(prev[districtId]||[]),item]}));
+      const item=await partyService.create(Number(districtId),{name:name.trim()});
+      setParties(prev=>({...prev,[districtId]:[...(prev[districtId]||[]),item]}));
       setPartyQuery("");resetPage();
       setName("");setModalOpen(false);
     }catch(error){setSaveError(error?.response?.data?.message||error.message||"Could not add this party.");}
@@ -65,13 +65,13 @@ export default function NominationPage() {
     setSaving(true);setSaveError("");
     const oldDistrictId=String(editingParty.districtId??districtId);
     try{
-      const item=await candidateService.update(Number(oldDistrictId),editingParty.id,{name:name.trim(),districtId:Number(districtId)});
-      setCandidates(prev=>{
+      const item=await partyService.update(Number(oldDistrictId),editingParty.id,{name:name.trim(),districtId:Number(districtId)});
+      setParties(prev=>{
         const next={...prev};
         const oldList=next[oldDistrictId]||[];
-        next[oldDistrictId]=oldList.filter(candidate=>candidate.id!==editingParty.id);
+        next[oldDistrictId]=oldList.filter(party=>party.id!==editingParty.id);
         if(oldDistrictId===districtId){
-          next[oldDistrictId]=oldList.map(candidate=>candidate.id===editingParty.id?{...candidate,...item,name:name.trim(),districtId:Number(districtId)}:candidate);
+          next[oldDistrictId]=oldList.map(party=>party.id===editingParty.id?{...party,...item,name:name.trim(),districtId:Number(districtId)}:party);
         }else{
           next[districtId]=[...(next[districtId]||[]),{...item,name:name.trim(),districtId:Number(districtId)}];
         }
@@ -82,8 +82,8 @@ export default function NominationPage() {
     finally{setSaving(false);}
   };
   const remove=async id=>{
-    await candidateService.delete(Number(districtId),id);
-    setCandidates(prev=>({...prev,[districtId]:(prev[districtId]||[]).filter(x=>x.id!==id)}));
+    await partyService.delete(Number(districtId),id);
+    setParties(prev=>({...prev,[districtId]:(prev[districtId]||[]).filter(x=>x.id!==id)}));
     resetPage();
   };
 

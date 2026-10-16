@@ -37,7 +37,7 @@ export default function ResultLogPage() {
             <td><span className="result-log-time">{new Date(result.calculatedAt).toLocaleString()}</span></td>
             <td><strong>{result.district}</strong></td>
             <td>{formatNumber(result.validVotes)}</td>
-            <td>{result.candidates.length}</td>
+            <td>{result.parties.length}</td>
             <td>{result.seats}</td>
             <td><Button variant="secondary result-log-open" icon={ArrowUpRight} onClick={()=>openResult(result)}>View result</Button></td>
           </tr>)}

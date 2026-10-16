@@ -6,4 +6,4 @@ export const ELECTION_STATUS = {
 } as const;
 
 export const MAX_PROVINCES = 15;
-export const MAX_CANDIDATES = 15;
+export const MAX_PARTIES = 15;

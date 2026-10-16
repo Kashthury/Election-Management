@@ -2,7 +2,7 @@ import { ArrowLeft, CheckCircle2, Percent, Save, ShieldCheck } from "lucide-reac
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { settingsService } from "../../services/settingsService";
+import { settingsService } from "../../api/management/settings";
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/common/Button";
 import { ROUTES } from "../../constants/routes";

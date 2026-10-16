@@ -2,7 +2,7 @@ import { ArrowLeft, BarChart3, Building2, MapPin, Plus, Check, CheckCircle2, X }
 import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { districtService } from "../../services/districtService";
+import { districtService } from "../../api/management/districts";
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/common/Button";
 import { ROUTES } from "../../constants/routes";

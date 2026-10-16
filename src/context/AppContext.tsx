@@ -1,13 +1,16 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode, Dispatch, SetStateAction } from "react";
-import { initialProvinces, initialDistricts, initialCandidates, initialSettings } from "../mocks/electionData";
-import type { CandidatesByDistrict, District, ElectionResult, ElectionSettings, Province, ResultLogEntry } from "../types";
+import { initialProvinces, initialDistricts, initialParties, initialSettings } from "../mocks/electionData";
+import type { PartiesByDistrict, District, ElectionResult, ElectionSettings, Province, ResultLogEntry } from "../types";
 
 const RESULT_LOG_KEY = "election-system-result-log";
 const readResultLog = (): ResultLogEntry[] => {
   try {
     const stored = JSON.parse(localStorage.getItem(RESULT_LOG_KEY) || "[]");
-    return Array.isArray(stored) ? stored.filter(entry => entry && Array.isArray(entry.candidates)) : [];
+    if (!Array.isArray(stored)) return [];
+    return stored
+      .map(entry => entry && ({ ...entry, parties: entry.parties ?? entry["candidates"] }))
+      .filter(entry => entry && Array.isArray(entry.parties));
   }
   catch { return []; }
 };
@@ -17,8 +20,8 @@ interface AppContextValue {
   setProvinces: Dispatch<SetStateAction<Province[]>>;
   districts: District[];
   setDistricts: Dispatch<SetStateAction<District[]>>;
-  candidates: CandidatesByDistrict;
-  setCandidates: Dispatch<SetStateAction<CandidatesByDistrict>>;
+  parties: PartiesByDistrict;
+  setParties: Dispatch<SetStateAction<PartiesByDistrict>>;
   settings: ElectionSettings;
   setSettings: Dispatch<SetStateAction<ElectionSettings>>;
   lastResult: ResultLogEntry | null;
@@ -33,7 +36,7 @@ const AppContext = createContext<AppContextValue | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [provinces, setProvinces] = useState<Province[]>(initialProvinces);
   const [districts, setDistricts] = useState<District[]>(initialDistricts);
-  const [candidates, setCandidates] = useState<CandidatesByDistrict>(initialCandidates);
+  const [parties, setParties] = useState<PartiesByDistrict>(initialParties);
   const [settings, setSettings] = useState<ElectionSettings>(initialSettings);
   const [lastResult, setLastResult] = useState<ResultLogEntry | null>(null);
   const [resultsLog, setResultsLog] = useState(readResultLog);
@@ -54,11 +57,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const value = useMemo(() => ({
     provinces, setProvinces,
     districts, setDistricts,
-    candidates, setCandidates,
+    parties, setParties,
     settings, setSettings,
     lastResult, setLastResult,
     resultsLog, setResultsLog, appendResult,
-  }), [provinces, districts, candidates, settings, lastResult, resultsLog]);
+  }), [provinces, districts, parties, settings, lastResult, resultsLog]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

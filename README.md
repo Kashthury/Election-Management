@@ -8,10 +8,11 @@ This project is intentionally structured like a maintainable enterprise frontend
 - `src/components` — reusable UI components
 - `src/layouts` — application layout
 - `src/features` — domain-specific reusable modules
-- `src/services` — API/mock data access
+- `src/api/management` — domain API modules for provinces, districts, parties, settings and elections
+- `src/lib/api.ts` — shared Axios client and mock/API adapter selection
 - `src/hooks` — reusable React hooks
 - `src/context` — shared application state
-- `src/utils` — calculation/format/validation helpers
+- `src/utils` — calculation/format/validation helpers and `apiEndpoint.ts` for API paths
 - `src/constants` — routes and domain constants
 - `src/mocks` — temporary mock data
 - `src/routes` — route configuration
@@ -27,17 +28,17 @@ Components/pages call service functions such as:
 provinceService.getAll()
 provinceService.create(payload)
 districtService.getAll()
-candidateService.getByDistrict(id)
+partyService.getByDistrict(id)
 electionService.calculate(payload)
 ```
 
-Currently these services use `mockAdapter`.
+The management modules use mock data when `VITE_USE_MOCK=true` and the shared API client when it is `false`.
 
 When Spring Boot is ready:
 
 1. Set `VITE_USE_MOCK=false`
 2. Set `VITE_API_BASE_URL=http://localhost:8080/api`
-3. Change the service adapter to `apiAdapter` (or make the adapter selection automatic).
+3. The adapter switches automatically using `VITE_USE_MOCK`.
 4. Keep pages/components unchanged.
 
 This keeps API integration isolated from the UI.

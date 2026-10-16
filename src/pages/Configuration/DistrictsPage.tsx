@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, Building2, Search, SquarePen, Trash2, X, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
-import { districtService } from "../../services/districtService";
+import { districtService } from "../../api/management/districts";
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/common/Button";
 import { ROUTES } from "../../constants/routes";

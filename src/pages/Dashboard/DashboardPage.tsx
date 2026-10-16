@@ -11,8 +11,8 @@ import type { LucideProps } from "lucide-react";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const { provinces, districts, candidates } = useAppContext();
-  const candidateCount = Object.values(candidates).reduce((sum, list) => sum + list.length, 0);
+  const { provinces, districts, parties } = useAppContext();
+  const partyCount = Object.values(parties).reduce((sum, list) => sum + list.length, 0);
   const allocatedCount = districts.filter(d => Number(d.seats) > 0).length;
 
   const workflow = [
@@ -27,7 +27,7 @@ export default function DashboardPage() {
     <div className="stats-grid">
       <StatCard title="Provinces" value={provinces.length} icon={Map}/>
       <StatCard title="Districts" value={districts.length} icon={Building2}/>
-      <StatCard title="Parties" value={candidateCount} icon={Users}/>
+      <StatCard title="Parties" value={partyCount} icon={Users}/>
       <StatCard title="Districts with seats" value={`${allocatedCount}/${districts.length}`} icon={BarChart3}/>
     </div>
     <div className="dashboard-grid">
@@ -38,7 +38,7 @@ export default function DashboardPage() {
       </Card>
       <Card><div className="card-title"><h3>Election at a glance</h3><p>Current setup and registration status.</p></div>
         <Readiness icon={Settings} title="Configuration" detail={`${provinces.length} provinces · ${districts.length} districts`} onClick={() => navigate(ROUTES.CONFIGURATION)}/>
-        <Readiness icon={Users} tone="violet" title="Party nominations" detail={`${candidateCount} parties registered`} onClick={() => navigate(ROUTES.NOMINATION)}/>
+        <Readiness icon={Users} tone="violet" title="Party nominations" detail={`${partyCount} parties registered`} onClick={() => navigate(ROUTES.NOMINATION)}/>
         <Readiness icon={BarChart3} tone="green" title="Seat allocation" detail={`${allocatedCount} of ${districts.length} districts configured`} onClick={() => navigate(ROUTES.SEATS)}/>
       </Card>
     </div>
