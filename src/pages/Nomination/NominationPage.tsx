@@ -8,6 +8,7 @@ import Button from "../../components/common/Button";
 import DataTable from "../../components/common/DataTable";
 import { usePagination } from "../../hooks/usePagination";
 import Pagination from "../../components/common/Pagination";
+import ClearFiltersButton from "../../components/common/ClearFiltersButton";
 import type { Party } from "../../types";
 
 export default function NominationPage() {
@@ -92,6 +93,7 @@ export default function NominationPage() {
       <label><span className="nomination-filter-label"><MapPin size={14}/> Province</span><select className="input" value={provinceId} onChange={changeProvince}><option value="">Select province</option>{provinces.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
       <label><span className="nomination-filter-label"><Building2 size={14}/> District</span><select className="input" value={districtId} onChange={e=>{setDistrictId(e.target.value);resetPage();}} disabled={!provinceId||!provinceDistricts.length}><option value="">{!provinceId?"Select province first":provinceDistricts.length?"Select district":"No districts in this province"}</option>{provinceDistricts.map(d=><option key={d.id} value={d.id}>{d.name}</option>)}</select></label>
       <label><span className="nomination-filter-label"><Search size={14}/> Search party</span><input className="input" type="search" placeholder="Enter party name" value={partyQuery} onChange={e=>{setPartyQuery(e.target.value);resetPage();}}/></label>
+      <ClearFiltersButton onClick={()=>{setProvinceId("");setDistrictId("");setPartyQuery("");resetPage();}} />
     </div></Card>
     <Card><div className="card-title"><h3>Registered parties</h3><p>{districts.find(d=>d.id===Number(districtId))?.name} · {filteredParties.length} shown / {list.length} registered</p></div>
       <div className="table-scroll"><table className="data-table registered-parties-table"><thead><tr><th>#</th><th>Party</th><th>Province</th><th>District</th><th className="registered-parties-actions">Actions</th></tr></thead><tbody>{pageItems.map((c,i)=>{const partyDistrict=districts.find(d=>d.id===Number(c.districtId));const partyProvince=provinces.find(p=>p.id===partyDistrict?.provinceId);return <tr key={`${c.districtId}-${c.id}`}><td>{(pagination?.page-1||0)*(pagination?.pageSize||10)+i+1}</td><td><strong>{c.name}</strong></td><td>{partyProvince?.name||partyDistrict?.provinceName||"—"}</td><td>{partyDistrict?.name||"—"}</td><td className="registered-parties-actions"><div className="row-actions"><button className="row-action" onClick={()=>openEdit(c)} aria-label={`Edit ${c.name}`} title="Edit"><SquarePen size={16}/></button><button className="row-action delete" onClick={()=>remove(c.id)} aria-label={`Remove ${c.name}`} title="Remove"><Trash2 size={16}/></button></div></td></tr>;})}</tbody></table></div>

@@ -18,6 +18,7 @@ import { ROUTES } from "../../constants/routes";
 import PageHeader from "../../components/common/PageHeader";
 import Button from "../../components/common/Button";
 import Pagination from "../../components/common/Pagination";
+import ClearFiltersButton from "../../components/common/ClearFiltersButton";
 import { usePagination } from "../../hooks/usePagination";
 import type { Party } from "../../types";
 
@@ -286,6 +287,7 @@ export default function ElectionPage() {
                 ))}
               </select>
             </label>
+            <ClearFiltersButton onClick={() => { setProvinceId(""); setDistrictId(""); setVotes([]); setValidVotes(0); setError(""); }} />
             <Button icon={Plus} onClick={openVoteModal}>
               Valid Votes
             </Button>

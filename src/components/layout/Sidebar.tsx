@@ -1,9 +1,8 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, Settings, Users, Vote, BarChart3, FileText, History, X } from "lucide-react";
+import { Settings, Users, Vote, BarChart3, History, X } from "lucide-react";
 import { ROUTES } from "../../constants/routes";
 
 const groups = [
-  { label: "Workspace", items: [{ label: "Dashboard", icon: LayoutDashboard, to: ROUTES.DASHBOARD }] },
   { label: "Election Setup", items: [{ label: "Configuration", icon: Settings, to: ROUTES.CONFIGURATION }, { label: "Nominations", icon: Users, to: ROUTES.NOMINATION }] },
   { label: "Election Operations", items: [{ label: "Vote Entry", icon: Vote, to: ROUTES.ELECTION }, { label: "Latest Results", icon: BarChart3, to: ROUTES.RESULTS }, { label: "Result Log", icon: History, to: ROUTES.RESULT_LOG }] },
 ];

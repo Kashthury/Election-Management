@@ -8,6 +8,7 @@ import Button from "../../components/common/Button";
 import { ROUTES } from "../../constants/routes";
 import { usePagination } from "../../hooks/usePagination";
 import Pagination from "../../components/common/Pagination";
+import ClearFiltersButton from "../../components/common/ClearFiltersButton";
 import type { Province } from "../../types";
 
 export default function ProvincesPage() {
@@ -53,7 +54,7 @@ export default function ProvincesPage() {
       <div className="module-summary-card"><span className="module-summary-icon violet"><Map size={19}/></span><div><small>Capacity</small><strong>{provinces.length} <small>/ 15</small></strong></div></div>
     </div>
     <section className="module-panel">
-      <div className="module-panel-heading"><div><h3>All provinces</h3><p>Search and manage the regions in your election setup.</p></div><label className="module-search"><Search size={16}/><input aria-label="Search provinces" placeholder="Search provinces" value={query} onChange={e=>{setQuery(e.target.value);resetPage();}}/></label></div>
+      <div className="module-panel-heading"><div><h3>All provinces</h3><p>Search and manage the regions in your election setup.</p></div><div className="filter-actions"><label className="module-search"><Search size={16}/><input aria-label="Search provinces" placeholder="Search provinces" value={query} onChange={e=>{setQuery(e.target.value);resetPage();}}/></label><ClearFiltersButton onClick={()=>{setQuery("");resetPage();}}/></div></div>
       <div className="table-scroll"><table className="data-table module-table"><thead><tr><th>Province</th><th>Districts</th><th>Status</th><th className="actions-column">Actions</th></tr></thead><tbody>
         {visibleProvinces.map(p=>{const status=(p.status||"active").toLowerCase();return <tr key={p.id}><td><div className="entity-cell"><span className="entity-avatar">{p.name.slice(0,1).toUpperCase()}</span><strong>{p.name}</strong></div></td><td>{p.districtCount || 0}</td><td><label className={`province-status-select ${status}`}><span className="module-status"><i/>{status === "active" ? "Active" : "Inactive"}</span><select aria-label={`${p.name} status`} value={status} onChange={e=>changeStatus(p,e.target.value)}><option value="active">Active</option><option value="inactive">Inactive</option></select></label></td><td><div className="row-actions"><button className="row-action" aria-label={`Edit ${p.name}`} title="Edit" onClick={()=>openEdit(p)}><SquarePen size={16}/></button><button className="row-action delete" aria-label={`Delete ${p.name}`} title="Delete" onClick={()=>remove(p.id)}><Trash2 size={16}/></button></div></td></tr>;})}
         {!visibleProvinces.length && <tr><td colSpan="4" className="module-empty">{query ? "No provinces match your search." : "No provinces yet. Add a province to get started."}</td></tr>}
